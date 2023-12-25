@@ -17,12 +17,12 @@ jobs:
         mkdir -p ~/.ssh/
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
-        ssh-keyscan -H  3.83.31.58 >> ~/.ssh/known_hosts
+        ssh-keyscan -H  52.5.156.22 >> ~/.ssh/known_hosts
 
     - name: Deploy to EC2
       env:
         SERVER_USER: ubuntu  # Sesuaikan dengan nama pengguna server Anda
-        SERVER_IP:  3.83.31.58  # IP publik EC2 Anda
+        SERVER_IP:  52.5.156.22  # IP publik EC2 Anda
         DEPLOY_PATH: /www/wwwroot/laluisari.my.id  # Sesuaikan dengan lokasi aplikasi Laravel di server
       run: |
         rsync -avz --exclude '.env' --delete-after --quiet $GITHUB_WORKSPACE/ $SERVER_USER@$SERVER_IP:$DEPLOY_PATH
