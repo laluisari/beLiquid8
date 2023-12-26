@@ -31,7 +31,7 @@ Route::post('/generate/merge-headers', [GenerateController::class, 'mapAndMergeH
 Route::resource('product_olds', ProductOldController::class);
 Route::resource('new_products', NewProductController::class);
 Route::resource('categories', CategoryController::class);
-
+ 
 Route::get('/documents', [DocumentController::class, 'index']);
 Route::get('/documents/{document}', [DocumentController::class, 'show']);
 

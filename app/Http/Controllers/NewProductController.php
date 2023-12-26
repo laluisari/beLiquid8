@@ -66,7 +66,7 @@ class NewProductController extends Controller
             'new_tag_product'
         ]);
     
-        if ($status !== 'lolos') {
+        if ($status !== 'lolos') { 
             $inputData['new_status_product'] = 'display';
             $inputData['new_quantity_product'] = 0;
             $inputData['new_price_product'] = 0;
