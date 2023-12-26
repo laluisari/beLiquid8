@@ -3,27 +3,21 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main  # Set the branch to your default branch
+      - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up SSH
-      run: |
-        mkdir -p ~/.ssh/
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-        chmod 600 ~/.ssh/deploy_key
-        ssh-keyscan -H  52.5.156.22 >> ~/.ssh/known_hosts
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
-    - name: Deploy to EC2
-      env:
-        SERVER_USER: ubuntu  # Sesuaikan dengan nama pengguna server Anda
-        SERVER_IP:  52.5.156.22  # IP publik EC2 Anda
-        DEPLOY_PATH: /www/wwwroot/laluisari.my.id  # Sesuaikan dengan lokasi aplikasi Laravel di server
-      run: |
-        rsync -avz --exclude '.env' --delete-after --quiet $GITHUB_WORKSPACE/ $SERVER_USER@$SERVER_IP:$DEPLOY_PATH
-        ssh -i ~/.ssh/deploy_key $SERVER_USER@$SERVER_IP "cd $DEPLOY_PATH && composer install --no-dev && php artisan migrate --force"
+      - name: Deploy to EC2
+        run: |
+          ssh -o "StrictHostKeyChecking=no" ubuntu@52.5.156.22 'cd /www/wwwroot/laluisari.my.id && git pull origin main'
